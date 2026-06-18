@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core">
+<h:head>
+    <title>Atendimentos</title>
+</h:head>
+<h:body>
+    <h1>Atendimentos</h1>
+
+    <h:messages globalOnly="true" showDetail="true" />
+
+    <h:form>
+        <p>
+            <h:commandButton value="Novo atendimento" action="#{atendimentoBean.novoAtendimento}" />
+            <h:link value="Voltar ao inicio" outcome="/index" />
+        </p>
+
+        <h:panelGroup rendered="#{empty atendimentoBean.atendimentos}">
+            <p>Nenhum atendimento cadastrado.</p>
+        </h:panelGroup>
+
+        <h:dataTable value="#{atendimentoBean.atendimentos}" var="atendimento" border="1"
+                     rendered="#{not empty atendimentoBean.atendimentos}">
+            <h:column>
+                <f:facet name="header">ID</f:facet>
+                <h:outputText value="#{atendimento.id}" />
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">Data do atendimento</f:facet>
+                <h:outputText value="#{atendimento.dataAtendimento}">
+                    <f:convertDateTime type="localDate" pattern="dd/MM/yyyy" />
+                </h:outputText>
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">Descricao</f:facet>
+                <h:outputText value="#{atendimento.descricao}" />
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">Status</f:facet>
+                <h:outputText value="#{atendimento.status}" />
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">Paciente</f:facet>
+                <h:outputText value="#{atendimento.paciente.nome}" />
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">Acoes</f:facet>
+                <h:commandLink value="Editar" action="#{atendimentoBean.prepararEdicao(atendimento.id)}" />
+                <h:outputText value=" | " />
+                <h:commandLink value="Excluir" action="#{atendimentoBean.excluir(atendimento.id)}" />
+            </h:column>
+        </h:dataTable>
+    </h:form>
+</h:body>
+</html>

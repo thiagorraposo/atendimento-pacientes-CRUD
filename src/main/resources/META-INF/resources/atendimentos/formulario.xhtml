@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:pt="jakarta.faces.passthrough">
+<f:metadata>
+    <f:viewParam name="id" value="#{atendimentoBean.atendimentoId}" />
+    <f:viewAction action="#{atendimentoBean.carregarFormulario}" />
+</f:metadata>
+
+<h:head>
+    <title>Formulario de Atendimento</title>
+</h:head>
+<h:body>
+    <h1>Formulario de Atendimento</h1>
+
+    <h:messages showDetail="true" />
+
+    <h:form>
+        <h:inputHidden value="#{atendimentoBean.atendimento.id}" />
+
+        <p>
+            <h:outputLabel for="dataAtendimento" value="Data do atendimento" /><br />
+            <h:inputText id="dataAtendimento" value="#{atendimentoBean.atendimento.dataAtendimento}"
+                         required="true" requiredMessage="Data do atendimento e obrigatoria"
+                         pt:type="date">
+                <f:convertDateTime type="localDate" pattern="yyyy-MM-dd" />
+            </h:inputText>
+            <h:message for="dataAtendimento" />
+        </p>
+
+        <p>
+            <h:outputLabel for="descricao" value="Descricao" /><br />
+            <h:inputTextarea id="descricao" value="#{atendimentoBean.atendimento.descricao}"
+                             required="true" requiredMessage="Descricao e obrigatoria"
+                             rows="4" cols="50" />
+            <h:message for="descricao" />
+        </p>
+
+        <p>
+            <h:outputLabel for="status" value="Status" /><br />
+            <h:selectOneMenu id="status" value="#{atendimentoBean.atendimento.status}"
+                             required="true" requiredMessage="Status e obrigatorio">
+                <f:selectItem itemLabel="Selecione" itemValue="" noSelectionOption="true" />
+                <f:selectItems value="#{atendimentoBean.statusDisponiveis}" var="status"
+                               itemLabel="#{status}" itemValue="#{status}" />
+            </h:selectOneMenu>
+            <h:message for="status" />
+        </p>
+
+        <p>
+            <h:outputLabel for="paciente" value="Paciente" /><br />
+            <h:selectOneMenu id="paciente" value="#{atendimentoBean.pacienteIdSelecionado}"
+                             required="true" requiredMessage="Paciente e obrigatorio">
+                <f:selectItem itemLabel="Selecione" itemValue="#{null}" noSelectionOption="true" />
+                <f:selectItems value="#{atendimentoBean.pacientes}" var="paciente"
+                               itemLabel="#{paciente.nome}" itemValue="#{paciente.id}" />
+            </h:selectOneMenu>
+            <h:message for="paciente" />
+        </p>
+
+        <h:commandButton value="Salvar" action="#{atendimentoBean.salvar}" />
+        <h:button value="Cancelar" outcome="/atendimentos/listar" />
+    </h:form>
+</h:body>
+</html>
