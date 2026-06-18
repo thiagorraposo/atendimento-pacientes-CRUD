@@ -5,11 +5,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "pacientes")
@@ -37,6 +40,9 @@ public class Paciente {
     private String email;
 
     private String cidade;
+
+    @OneToMany(mappedBy = "paciente")
+    private List<Atendimento> atendimentos = new ArrayList<>();
 
     public Paciente() {
     }
@@ -104,5 +110,13 @@ public class Paciente {
 
     public void setCidade(String cidade) {
         this.cidade = cidade;
+    }
+
+    public List<Atendimento> getAtendimentos() {
+        return atendimentos;
+    }
+
+    public void setAtendimentos(List<Atendimento> atendimentos) {
+        this.atendimentos = atendimentos;
     }
 }
