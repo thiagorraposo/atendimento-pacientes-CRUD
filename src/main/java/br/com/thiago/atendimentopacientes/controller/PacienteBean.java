@@ -24,6 +24,7 @@ public class PacienteBean implements Serializable {
     private Paciente paciente;
     private List<Paciente> pacientes;
     private Long pacienteId;
+    private String nomeBusca;
 
     public PacienteBean(PacienteService pacienteService) {
         this.pacienteService = pacienteService;
@@ -37,6 +38,20 @@ public class PacienteBean implements Serializable {
 
     public void carregarPacientes() {
         pacientes = pacienteService.listarTodos();
+    }
+
+    public void buscarPorNome() {
+        if (estaEmBranco(nomeBusca)) {
+            carregarPacientes();
+            return;
+        }
+
+        pacientes = pacienteService.buscarPorNome(nomeBusca);
+    }
+
+    public void limparBusca() {
+        nomeBusca = null;
+        carregarPacientes();
     }
 
     public void carregarFormulario() {
@@ -85,7 +100,7 @@ public class PacienteBean implements Serializable {
     public void excluir(Long id) {
         try {
             pacienteService.excluir(id);
-            carregarPacientes();
+            atualizarListagem();
             adicionarMensagemSucesso("Paciente excluido com sucesso");
         } catch (RegraNegocioException exception) {
             adicionarMensagemErro(exception.getMessage());
@@ -96,6 +111,19 @@ public class PacienteBean implements Serializable {
 
     public void limparFormulario() {
         paciente = new Paciente();
+    }
+
+    private void atualizarListagem() {
+        if (estaEmBranco(nomeBusca)) {
+            carregarPacientes();
+            return;
+        }
+
+        buscarPorNome();
+    }
+
+    private boolean estaEmBranco(String valor) {
+        return valor == null || valor.trim().isEmpty();
     }
 
     private void adicionarMensagemSucesso(String mensagem) {
@@ -137,5 +165,13 @@ public class PacienteBean implements Serializable {
 
     public void setPacienteId(Long pacienteId) {
         this.pacienteId = pacienteId;
+    }
+
+    public String getNomeBusca() {
+        return nomeBusca;
+    }
+
+    public void setNomeBusca(String nomeBusca) {
+        this.nomeBusca = nomeBusca;
     }
 }

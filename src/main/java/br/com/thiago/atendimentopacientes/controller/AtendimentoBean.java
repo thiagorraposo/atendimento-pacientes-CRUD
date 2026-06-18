@@ -30,6 +30,7 @@ public class AtendimentoBean implements Serializable {
     private List<Paciente> pacientes;
     private Long atendimentoId;
     private Long pacienteIdSelecionado;
+    private String statusFiltro;
 
     public AtendimentoBean(AtendimentoService atendimentoService, PacienteService pacienteService) {
         this.atendimentoService = atendimentoService;
@@ -45,6 +46,20 @@ public class AtendimentoBean implements Serializable {
 
     public void carregarAtendimentos() {
         atendimentos = atendimentoService.listarTodos();
+    }
+
+    public void filtrarPorStatus() {
+        if (estaEmBranco(statusFiltro)) {
+            carregarAtendimentos();
+            return;
+        }
+
+        atendimentos = atendimentoService.listarPorStatus(statusFiltro);
+    }
+
+    public void limparFiltro() {
+        statusFiltro = null;
+        carregarAtendimentos();
     }
 
     public void carregarPacientes() {
@@ -101,7 +116,7 @@ public class AtendimentoBean implements Serializable {
     public void excluir(Long id) {
         try {
             atendimentoService.excluir(id);
-            carregarAtendimentos();
+            atualizarListagem();
             adicionarMensagemSucesso("Atendimento excluido com sucesso");
         } catch (RegraNegocioException exception) {
             adicionarMensagemErro(exception.getMessage());
@@ -134,6 +149,19 @@ public class AtendimentoBean implements Serializable {
         Paciente paciente = new Paciente();
         paciente.setId(pacienteIdSelecionado);
         atendimento.setPaciente(paciente);
+    }
+
+    private void atualizarListagem() {
+        if (estaEmBranco(statusFiltro)) {
+            carregarAtendimentos();
+            return;
+        }
+
+        filtrarPorStatus();
+    }
+
+    private boolean estaEmBranco(String valor) {
+        return valor == null || valor.trim().isEmpty();
     }
 
     private void adicionarMensagemSucesso(String mensagem) {
@@ -198,5 +226,13 @@ public class AtendimentoBean implements Serializable {
 
     public List<String> getStatusDisponiveis() {
         return Arrays.asList("Aberto", "Em andamento", "Finalizado", "Cancelado");
+    }
+
+    public String getStatusFiltro() {
+        return statusFiltro;
+    }
+
+    public void setStatusFiltro(String statusFiltro) {
+        this.statusFiltro = statusFiltro;
     }
 }

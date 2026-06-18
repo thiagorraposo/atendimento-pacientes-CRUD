@@ -36,36 +36,71 @@ public class RelatorioSistemaServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
 
         try (PrintWriter writer = response.getWriter()) {
+            String contextPath = request.getContextPath();
+
             writer.println("<!DOCTYPE html>");
             writer.println("<html lang=\"pt-BR\">");
             writer.println("<head>");
             writer.println("<meta charset=\"UTF-8\" />");
-            writer.println("<title>Relatorio do Sistema</title>");
+            writer.println("<title>Relatório do Sistema</title>");
+            writer.println("<link rel=\"stylesheet\" href=\"" + contextPath
+                    + "/jakarta.faces.resource/style.css.xhtml?ln=css\" />");
             writer.println("</head>");
             writer.println("<body>");
-            writer.println("<h1>Relatório do Sistema</h1>");
-            writer.println("<p>Gerado em: " + texto(LocalDateTime.now().format(DATA_HORA_FORMATTER)) + "</p>");
-            writer.println("<p>Total de pacientes cadastrados: " + pacientes.size() + "</p>");
-            writer.println("<p>Total de atendimentos cadastrados: " + atendimentos.size() + "</p>");
+            writer.println("<header class=\"topbar\">");
+            writer.println("<h1>Sistema de Atendimento de Pacientes</h1>");
+            writer.println("<nav class=\"menu\">");
+            writer.println("<a href=\"" + contextPath + "/index.xhtml\">Início</a>");
+            writer.println("<a href=\"" + contextPath + "/pacientes/listar.xhtml\">Pacientes</a>");
+            writer.println("<a href=\"" + contextPath + "/atendimentos/listar.xhtml\">Atendimentos</a>");
+            writer.println("<a href=\"" + contextPath + "/relatorio-sistema\">Relatório</a>");
+            writer.println("</nav>");
+            writer.println("</header>");
+
+            writer.println("<main class=\"container\">");
+            writer.println("<section class=\"page-header\">");
+            writer.println("<h2>Relatório do Sistema</h2>");
+            writer.println("<p>Resumo geral de pacientes e atendimentos cadastrados.</p>");
+            writer.println("</section>");
+
+            writer.println("<section class=\"panel\">");
+            writer.println("<div class=\"filter-row\">");
+            writer.println("<div class=\"field\">");
+            writer.println("<label>Total de pacientes cadastrados</label>");
+            writer.println("<p class=\"empty-message\">" + pacientes.size() + "</p>");
+            writer.println("</div>");
+            writer.println("<div class=\"field\">");
+            writer.println("<label>Total de atendimentos cadastrados</label>");
+            writer.println("<p class=\"empty-message\">" + atendimentos.size() + "</p>");
+            writer.println("</div>");
+            writer.println("<div class=\"field\">");
+            writer.println("<label>Data e hora de geração</label>");
+            writer.println("<p class=\"empty-message\">" + texto(LocalDateTime.now().format(DATA_HORA_FORMATTER)) + "</p>");
+            writer.println("</div>");
+            writer.println("<a class=\"button secondary\" href=\"" + contextPath + "/index.xhtml\">Voltar para a página inicial</a>");
+            writer.println("</div>");
+            writer.println("</section>");
 
             escreverTabelaPacientes(writer, pacientes);
             escreverTabelaAtendimentos(writer, atendimentos);
 
-            writer.println("<p><a href=\"" + request.getContextPath() + "/index.xhtml\">Voltar para a página inicial</a></p>");
+            writer.println("</main>");
             writer.println("</body>");
             writer.println("</html>");
         }
     }
 
     private void escreverTabelaPacientes(PrintWriter writer, List<Paciente> pacientes) {
+        writer.println("<section class=\"panel\">");
         writer.println("<h2>Pacientes</h2>");
 
         if (pacientes.isEmpty()) {
-            writer.println("<p>Nenhum paciente cadastrado.</p>");
+            writer.println("<p class=\"empty-message\">Nenhum paciente cadastrado.</p>");
+            writer.println("</section>");
             return;
         }
 
-        writer.println("<table border=\"1\">");
+        writer.println("<table class=\"data-table\">");
         writer.println("<thead>");
         writer.println("<tr>");
         writer.println("<th>ID</th>");
@@ -87,23 +122,26 @@ public class RelatorioSistemaServlet extends HttpServlet {
 
         writer.println("</tbody>");
         writer.println("</table>");
+        writer.println("</section>");
     }
 
     private void escreverTabelaAtendimentos(PrintWriter writer, List<Atendimento> atendimentos) {
+        writer.println("<section class=\"panel\">");
         writer.println("<h2>Atendimentos</h2>");
 
         if (atendimentos.isEmpty()) {
-            writer.println("<p>Nenhum atendimento cadastrado.</p>");
+            writer.println("<p class=\"empty-message\">Nenhum atendimento cadastrado.</p>");
+            writer.println("</section>");
             return;
         }
 
-        writer.println("<table border=\"1\">");
+        writer.println("<table class=\"data-table\">");
         writer.println("<thead>");
         writer.println("<tr>");
         writer.println("<th>ID</th>");
         writer.println("<th>Data</th>");
         writer.println("<th>Status</th>");
-        writer.println("<th>Descricao</th>");
+        writer.println("<th>Descrição</th>");
         writer.println("<th>Paciente</th>");
         writer.println("</tr>");
         writer.println("</thead>");
@@ -121,6 +159,7 @@ public class RelatorioSistemaServlet extends HttpServlet {
 
         writer.println("</tbody>");
         writer.println("</table>");
+        writer.println("</section>");
     }
 
     private String formatarData(Atendimento atendimento) {

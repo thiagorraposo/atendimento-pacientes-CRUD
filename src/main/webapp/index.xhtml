@@ -2,28 +2,48 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="jakarta.faces.html">
 <h:head>
-    <title>Atendimento de Pacientes</title>
+    <title>Sistema de Atendimento de Pacientes</title>
+    <h:outputStylesheet library="css" name="style.css" />
 </h:head>
 <h:body>
-    <h1>Atendimento de Pacientes</h1>
-    <p>
-        Sistema web academico usando Spring Boot, JSF, JPA, Servlet,
-        Maven e MVC.
-    </p>
-
-    <h2>Modulos</h2>
-    <ul>
-        <li>
+    <header class="topbar">
+        <h1>Sistema de Atendimento de Pacientes</h1>
+        <nav class="menu">
+            <h:link value="Início" outcome="/index" />
             <h:link value="Pacientes" outcome="/pacientes/listar" />
-        </li>
-        <li>
             <h:link value="Atendimentos" outcome="/atendimentos/listar" />
-        </li>
-        <li>
             <h:outputLink value="#{facesContext.externalContext.requestContextPath}/relatorio-sistema">
-                Relatório do Sistema
+                Relatório
             </h:outputLink>
-        </li>
-    </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="page-header">
+            <h2>Sistema de Atendimento de Pacientes</h2>
+            <p>
+                Aplicação acadêmica para cadastro de pacientes, registro de atendimentos
+                e geração de relatório simples usando JSF, JPA, Servlet, PostgreSQL e MVC.
+            </p>
+        </section>
+
+        <section class="home-grid">
+            <h:link outcome="/pacientes/listar" styleClass="module-link">
+                <strong>Pacientes</strong>
+                <span>Cadastrar, consultar, editar e excluir pacientes.</span>
+            </h:link>
+
+            <h:link outcome="/atendimentos/listar" styleClass="module-link">
+                <strong>Atendimentos</strong>
+                <span>Registrar e acompanhar atendimentos vinculados a pacientes.</span>
+            </h:link>
+
+            <h:outputLink value="#{facesContext.externalContext.requestContextPath}/relatorio-sistema"
+                          styleClass="module-link">
+                <strong>Relatório do Sistema</strong>
+                <span>Visualizar totais e listagens em uma página gerada por Servlet.</span>
+            </h:outputLink>
+        </section>
+    </main>
 </h:body>
 </html>

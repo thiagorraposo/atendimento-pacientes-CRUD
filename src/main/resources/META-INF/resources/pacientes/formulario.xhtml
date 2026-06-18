@@ -9,58 +9,79 @@
 </f:metadata>
 
 <h:head>
-    <title>Formulario de Paciente</title>
+    <title>Formulário de Paciente</title>
+    <h:outputStylesheet library="css" name="style.css" />
 </h:head>
 <h:body>
-    <h1>Formulario de Paciente</h1>
+    <header class="topbar">
+        <h1>Sistema de Atendimento de Pacientes</h1>
+        <nav class="menu">
+            <h:link value="Início" outcome="/index" />
+            <h:link value="Pacientes" outcome="/pacientes/listar" />
+            <h:link value="Atendimentos" outcome="/atendimentos/listar" />
+            <h:outputLink value="#{facesContext.externalContext.requestContextPath}/relatorio-sistema">
+                Relatório
+            </h:outputLink>
+        </nav>
+    </header>
 
-    <h:messages showDetail="true" />
+    <main class="container">
+        <section class="page-header">
+            <h2>Formulário de Paciente</h2>
+            <p>Preencha os dados do paciente. Campos com asterisco são obrigatórios.</p>
+        </section>
 
-    <h:form>
-        <h:inputHidden value="#{pacienteBean.paciente.id}" />
+        <h:messages showDetail="true" styleClass="messages"
+                    infoClass="message-info" errorClass="message-error" />
 
-        <p>
-            <h:outputLabel for="nome" value="Nome" /><br />
-            <h:inputText id="nome" value="#{pacienteBean.paciente.nome}" required="true"
-                         requiredMessage="Nome e obrigatorio" />
-            <h:message for="nome" />
-        </p>
+        <h:form styleClass="panel">
+            <h:inputHidden value="#{pacienteBean.paciente.id}" />
 
-        <p>
-            <h:outputLabel for="cpf" value="CPF" /><br />
-            <h:inputText id="cpf" value="#{pacienteBean.paciente.cpf}" required="true"
-                         requiredMessage="CPF e obrigatorio" />
-            <h:message for="cpf" />
-        </p>
+            <div class="field">
+                <h:outputLabel for="nome" value="Nome *" />
+                <h:inputText id="nome" value="#{pacienteBean.paciente.nome}" required="true"
+                             requiredMessage="Nome e obrigatorio" />
+                <h:message for="nome" styleClass="field-message" />
+            </div>
 
-        <p>
-            <h:outputLabel for="dataNascimento" value="Data de nascimento" /><br />
-            <h:inputText id="dataNascimento" value="#{pacienteBean.paciente.dataNascimento}" pt:type="date">
-                <f:convertDateTime type="localDate" pattern="yyyy-MM-dd" />
-            </h:inputText>
-            <h:message for="dataNascimento" />
-        </p>
+            <div class="field">
+                <h:outputLabel for="cpf" value="CPF *" />
+                <h:inputText id="cpf" value="#{pacienteBean.paciente.cpf}" required="true"
+                             requiredMessage="CPF e obrigatorio" />
+                <h:message for="cpf" styleClass="field-message" />
+            </div>
 
-        <p>
-            <h:outputLabel for="telefone" value="Telefone" /><br />
-            <h:inputText id="telefone" value="#{pacienteBean.paciente.telefone}" />
-            <h:message for="telefone" />
-        </p>
+            <div class="field">
+                <h:outputLabel for="dataNascimento" value="Data de nascimento" />
+                <h:inputText id="dataNascimento" value="#{pacienteBean.paciente.dataNascimento}" pt:type="date">
+                    <f:convertDateTime type="localDate" pattern="yyyy-MM-dd" />
+                </h:inputText>
+                <h:message for="dataNascimento" styleClass="field-message" />
+            </div>
 
-        <p>
-            <h:outputLabel for="email" value="Email" /><br />
-            <h:inputText id="email" value="#{pacienteBean.paciente.email}" />
-            <h:message for="email" />
-        </p>
+            <div class="field">
+                <h:outputLabel for="telefone" value="Telefone" />
+                <h:inputText id="telefone" value="#{pacienteBean.paciente.telefone}" />
+                <h:message for="telefone" styleClass="field-message" />
+            </div>
 
-        <p>
-            <h:outputLabel for="cidade" value="Cidade" /><br />
-            <h:inputText id="cidade" value="#{pacienteBean.paciente.cidade}" />
-            <h:message for="cidade" />
-        </p>
+            <div class="field">
+                <h:outputLabel for="email" value="Email" />
+                <h:inputText id="email" value="#{pacienteBean.paciente.email}" />
+                <h:message for="email" styleClass="field-message" />
+            </div>
 
-        <h:commandButton value="Salvar" action="#{pacienteBean.salvar}" />
-        <h:button value="Cancelar" outcome="/pacientes/listar" />
-    </h:form>
+            <div class="field">
+                <h:outputLabel for="cidade" value="Cidade" />
+                <h:inputText id="cidade" value="#{pacienteBean.paciente.cidade}" />
+                <h:message for="cidade" styleClass="field-message" />
+            </div>
+
+            <div class="form-actions">
+                <h:commandButton value="Salvar" action="#{pacienteBean.salvar}" />
+                <h:button value="Voltar" outcome="/pacientes/listar" styleClass="button secondary" />
+            </div>
+        </h:form>
+    </main>
 </h:body>
 </html>

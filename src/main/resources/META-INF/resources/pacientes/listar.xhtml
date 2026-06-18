@@ -1,71 +1,108 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="jakarta.faces.html"
-      xmlns:f="jakarta.faces.core">
+      xmlns:f="jakarta.faces.core"
+      xmlns:pt="jakarta.faces.passthrough">
 <h:head>
     <title>Pacientes</title>
+    <h:outputStylesheet library="css" name="style.css" />
 </h:head>
 <h:body>
-    <h1>Pacientes</h1>
+    <header class="topbar">
+        <h1>Sistema de Atendimento de Pacientes</h1>
+        <nav class="menu">
+            <h:link value="Início" outcome="/index" />
+            <h:link value="Pacientes" outcome="/pacientes/listar" />
+            <h:link value="Atendimentos" outcome="/atendimentos/listar" />
+            <h:outputLink value="#{facesContext.externalContext.requestContextPath}/relatorio-sistema">
+                Relatório
+            </h:outputLink>
+        </nav>
+    </header>
 
-    <h:messages globalOnly="true" showDetail="true" />
+    <main class="container">
+        <section class="page-header">
+            <h2>Pacientes</h2>
+            <p>Consulte os pacientes cadastrados e mantenha os dados básicos atualizados.</p>
+        </section>
 
-    <h:form>
-        <p>
-            <h:commandButton value="Novo paciente" action="#{pacienteBean.novoPaciente}" />
-            <h:link value="Voltar ao inicio" outcome="/index" />
-        </p>
+        <h:messages globalOnly="true" showDetail="true" styleClass="messages"
+                    infoClass="message-info" errorClass="message-error" />
 
-        <h:panelGroup rendered="#{empty pacienteBean.pacientes}">
-            <p>Nenhum paciente cadastrado.</p>
-        </h:panelGroup>
+        <h:form>
+            <section class="panel">
+                <div class="filter-row">
+                    <div>
+                        <h:outputLabel for="nomeBusca" value="Buscar por nome" />
+                        <h:inputText id="nomeBusca" value="#{pacienteBean.nomeBusca}"
+                                     pt:placeholder="Digite parte do nome" />
+                    </div>
 
-        <h:dataTable value="#{pacienteBean.pacientes}" var="paciente" border="1"
-                     rendered="#{not empty pacienteBean.pacientes}">
-            <h:column>
-                <f:facet name="header">ID</f:facet>
-                <h:outputText value="#{paciente.id}" />
-            </h:column>
+                    <h:commandButton value="Buscar" action="#{pacienteBean.buscarPorNome}" />
+                    <h:commandButton value="Limpar Busca" action="#{pacienteBean.limparBusca}"
+                                     styleClass="button secondary" />
+                    <h:commandButton value="Novo Paciente" action="#{pacienteBean.novoPaciente}" />
+                </div>
+            </section>
 
-            <h:column>
-                <f:facet name="header">Nome</f:facet>
-                <h:outputText value="#{paciente.nome}" />
-            </h:column>
+            <section class="panel">
+                <h:panelGroup rendered="#{empty pacienteBean.pacientes}">
+                    <p class="empty-message">Nenhum paciente encontrado.</p>
+                </h:panelGroup>
 
-            <h:column>
-                <f:facet name="header">CPF</f:facet>
-                <h:outputText value="#{paciente.cpf}" />
-            </h:column>
+                <h:dataTable value="#{pacienteBean.pacientes}" var="paciente"
+                             styleClass="data-table"
+                             rendered="#{not empty pacienteBean.pacientes}">
+                    <h:column>
+                        <f:facet name="header">ID</f:facet>
+                        <h:outputText value="#{paciente.id}" />
+                    </h:column>
 
-            <h:column>
-                <f:facet name="header">Data de nascimento</f:facet>
-                <h:outputText value="#{paciente.dataNascimento}">
-                    <f:convertDateTime type="localDate" pattern="dd/MM/yyyy" />
-                </h:outputText>
-            </h:column>
+                    <h:column>
+                        <f:facet name="header">Nome</f:facet>
+                        <h:outputText value="#{paciente.nome}" />
+                    </h:column>
 
-            <h:column>
-                <f:facet name="header">Telefone</f:facet>
-                <h:outputText value="#{paciente.telefone}" />
-            </h:column>
+                    <h:column>
+                        <f:facet name="header">CPF</f:facet>
+                        <h:outputText value="#{paciente.cpf}" />
+                    </h:column>
 
-            <h:column>
-                <f:facet name="header">Email</f:facet>
-                <h:outputText value="#{paciente.email}" />
-            </h:column>
+                    <h:column>
+                        <f:facet name="header">Data de nascimento</f:facet>
+                        <h:outputText value="#{paciente.dataNascimento}">
+                            <f:convertDateTime type="localDate" pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                    </h:column>
 
-            <h:column>
-                <f:facet name="header">Cidade</f:facet>
-                <h:outputText value="#{paciente.cidade}" />
-            </h:column>
+                    <h:column>
+                        <f:facet name="header">Telefone</f:facet>
+                        <h:outputText value="#{paciente.telefone}" />
+                    </h:column>
 
-            <h:column>
-                <f:facet name="header">Acoes</f:facet>
-                <h:commandLink value="Editar" action="#{pacienteBean.prepararEdicao(paciente.id)}" />
-                <h:outputText value=" | " />
-                <h:commandLink value="Excluir" action="#{pacienteBean.excluir(paciente.id)}" />
-            </h:column>
-        </h:dataTable>
-    </h:form>
+                    <h:column>
+                        <f:facet name="header">Email</f:facet>
+                        <h:outputText value="#{paciente.email}" />
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">Cidade</f:facet>
+                        <h:outputText value="#{paciente.cidade}" />
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">Ações</f:facet>
+                        <div class="actions">
+                            <h:commandLink value="Editar" action="#{pacienteBean.prepararEdicao(paciente.id)}"
+                                           styleClass="button secondary" />
+                            <h:commandLink value="Excluir" action="#{pacienteBean.excluir(paciente.id)}"
+                                           styleClass="button danger"
+                                           onclick="return confirm('Deseja excluir este paciente?');" />
+                        </div>
+                    </h:column>
+                </h:dataTable>
+            </section>
+        </h:form>
+    </main>
 </h:body>
 </html>

@@ -9,58 +9,79 @@
 </f:metadata>
 
 <h:head>
-    <title>Formulario de Atendimento</title>
+    <title>Formulário de Atendimento</title>
+    <h:outputStylesheet library="css" name="style.css" />
 </h:head>
 <h:body>
-    <h1>Formulario de Atendimento</h1>
+    <header class="topbar">
+        <h1>Sistema de Atendimento de Pacientes</h1>
+        <nav class="menu">
+            <h:link value="Início" outcome="/index" />
+            <h:link value="Pacientes" outcome="/pacientes/listar" />
+            <h:link value="Atendimentos" outcome="/atendimentos/listar" />
+            <h:outputLink value="#{facesContext.externalContext.requestContextPath}/relatorio-sistema">
+                Relatório
+            </h:outputLink>
+        </nav>
+    </header>
 
-    <h:messages showDetail="true" />
+    <main class="container">
+        <section class="page-header">
+            <h2>Formulário de Atendimento</h2>
+            <p>Registre o atendimento e vincule-o a um paciente já cadastrado.</p>
+        </section>
 
-    <h:form>
-        <h:inputHidden value="#{atendimentoBean.atendimento.id}" />
+        <h:messages showDetail="true" styleClass="messages"
+                    infoClass="message-info" errorClass="message-error" />
 
-        <p>
-            <h:outputLabel for="dataAtendimento" value="Data do atendimento" /><br />
-            <h:inputText id="dataAtendimento" value="#{atendimentoBean.atendimento.dataAtendimento}"
-                         required="true" requiredMessage="Data do atendimento e obrigatoria"
-                         pt:type="date">
-                <f:convertDateTime type="localDate" pattern="yyyy-MM-dd" />
-            </h:inputText>
-            <h:message for="dataAtendimento" />
-        </p>
+        <h:form styleClass="panel">
+            <h:inputHidden value="#{atendimentoBean.atendimento.id}" />
 
-        <p>
-            <h:outputLabel for="descricao" value="Descricao" /><br />
-            <h:inputTextarea id="descricao" value="#{atendimentoBean.atendimento.descricao}"
-                             required="true" requiredMessage="Descricao e obrigatoria"
-                             rows="4" cols="50" />
-            <h:message for="descricao" />
-        </p>
+            <div class="field">
+                <h:outputLabel for="dataAtendimento" value="Data do atendimento *" />
+                <h:inputText id="dataAtendimento" value="#{atendimentoBean.atendimento.dataAtendimento}"
+                             required="true" requiredMessage="Data do atendimento e obrigatoria"
+                             pt:type="date">
+                    <f:convertDateTime type="localDate" pattern="yyyy-MM-dd" />
+                </h:inputText>
+                <h:message for="dataAtendimento" styleClass="field-message" />
+            </div>
 
-        <p>
-            <h:outputLabel for="status" value="Status" /><br />
-            <h:selectOneMenu id="status" value="#{atendimentoBean.atendimento.status}"
-                             required="true" requiredMessage="Status e obrigatorio">
-                <f:selectItem itemLabel="Selecione" itemValue="" noSelectionOption="true" />
-                <f:selectItems value="#{atendimentoBean.statusDisponiveis}" var="status"
-                               itemLabel="#{status}" itemValue="#{status}" />
-            </h:selectOneMenu>
-            <h:message for="status" />
-        </p>
+            <div class="field">
+                <h:outputLabel for="descricao" value="Descrição *" />
+                <h:inputTextarea id="descricao" value="#{atendimentoBean.atendimento.descricao}"
+                                 required="true" requiredMessage="Descricao e obrigatoria"
+                                 rows="4" cols="50" />
+                <h:message for="descricao" styleClass="field-message" />
+            </div>
 
-        <p>
-            <h:outputLabel for="paciente" value="Paciente" /><br />
-            <h:selectOneMenu id="paciente" value="#{atendimentoBean.pacienteIdSelecionado}"
-                             required="true" requiredMessage="Paciente e obrigatorio">
-                <f:selectItem itemLabel="Selecione" itemValue="#{null}" noSelectionOption="true" />
-                <f:selectItems value="#{atendimentoBean.pacientes}" var="paciente"
-                               itemLabel="#{paciente.nome}" itemValue="#{paciente.id}" />
-            </h:selectOneMenu>
-            <h:message for="paciente" />
-        </p>
+            <div class="field">
+                <h:outputLabel for="status" value="Status *" />
+                <h:selectOneMenu id="status" value="#{atendimentoBean.atendimento.status}"
+                                 required="true" requiredMessage="Status e obrigatorio">
+                    <f:selectItem itemLabel="Selecione" itemValue="" noSelectionOption="true" />
+                    <f:selectItems value="#{atendimentoBean.statusDisponiveis}" var="status"
+                                   itemLabel="#{status}" itemValue="#{status}" />
+                </h:selectOneMenu>
+                <h:message for="status" styleClass="field-message" />
+            </div>
 
-        <h:commandButton value="Salvar" action="#{atendimentoBean.salvar}" />
-        <h:button value="Cancelar" outcome="/atendimentos/listar" />
-    </h:form>
+            <div class="field">
+                <h:outputLabel for="paciente" value="Paciente *" />
+                <h:selectOneMenu id="paciente" value="#{atendimentoBean.pacienteIdSelecionado}"
+                                 required="true" requiredMessage="Paciente e obrigatorio">
+                    <f:selectItem itemLabel="Selecione" itemValue="#{null}" noSelectionOption="true" />
+                    <f:selectItems value="#{atendimentoBean.pacientes}" var="paciente"
+                                   itemLabel="#{paciente.nome}" itemValue="#{paciente.id}" />
+                </h:selectOneMenu>
+                <h:message for="paciente" styleClass="field-message" />
+            </div>
+
+            <div class="form-actions">
+                <h:commandButton value="Salvar" action="#{atendimentoBean.salvar}" />
+                <h:button value="Voltar" outcome="/atendimentos/listar" styleClass="button secondary" />
+            </div>
+        </h:form>
+    </main>
 </h:body>
 </html>

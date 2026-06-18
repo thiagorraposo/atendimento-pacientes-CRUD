@@ -4,58 +4,97 @@
       xmlns:f="jakarta.faces.core">
 <h:head>
     <title>Atendimentos</title>
+    <h:outputStylesheet library="css" name="style.css" />
 </h:head>
 <h:body>
-    <h1>Atendimentos</h1>
+    <header class="topbar">
+        <h1>Sistema de Atendimento de Pacientes</h1>
+        <nav class="menu">
+            <h:link value="Início" outcome="/index" />
+            <h:link value="Pacientes" outcome="/pacientes/listar" />
+            <h:link value="Atendimentos" outcome="/atendimentos/listar" />
+            <h:outputLink value="#{facesContext.externalContext.requestContextPath}/relatorio-sistema">
+                Relatório
+            </h:outputLink>
+        </nav>
+    </header>
 
-    <h:messages globalOnly="true" showDetail="true" />
+    <main class="container">
+        <section class="page-header">
+            <h2>Atendimentos</h2>
+            <p>Consulte atendimentos cadastrados e filtre por status quando necessário.</p>
+        </section>
 
-    <h:form>
-        <p>
-            <h:commandButton value="Novo atendimento" action="#{atendimentoBean.novoAtendimento}" />
-            <h:link value="Voltar ao inicio" outcome="/index" />
-        </p>
+        <h:messages globalOnly="true" showDetail="true" styleClass="messages"
+                    infoClass="message-info" errorClass="message-error" />
 
-        <h:panelGroup rendered="#{empty atendimentoBean.atendimentos}">
-            <p>Nenhum atendimento cadastrado.</p>
-        </h:panelGroup>
+        <h:form>
+            <section class="panel">
+                <div class="filter-row">
+                    <div>
+                        <h:outputLabel for="statusFiltro" value="Filtrar por status" />
+                        <h:selectOneMenu id="statusFiltro" value="#{atendimentoBean.statusFiltro}">
+                            <f:selectItem itemLabel="Todos" itemValue="" />
+                            <f:selectItems value="#{atendimentoBean.statusDisponiveis}" var="status"
+                                           itemLabel="#{status}" itemValue="#{status}" />
+                        </h:selectOneMenu>
+                    </div>
 
-        <h:dataTable value="#{atendimentoBean.atendimentos}" var="atendimento" border="1"
-                     rendered="#{not empty atendimentoBean.atendimentos}">
-            <h:column>
-                <f:facet name="header">ID</f:facet>
-                <h:outputText value="#{atendimento.id}" />
-            </h:column>
+                    <h:commandButton value="Filtrar" action="#{atendimentoBean.filtrarPorStatus}" />
+                    <h:commandButton value="Limpar Filtro" action="#{atendimentoBean.limparFiltro}"
+                                     styleClass="button secondary" />
+                    <h:commandButton value="Novo Atendimento" action="#{atendimentoBean.novoAtendimento}" />
+                </div>
+            </section>
 
-            <h:column>
-                <f:facet name="header">Data do atendimento</f:facet>
-                <h:outputText value="#{atendimento.dataAtendimento}">
-                    <f:convertDateTime type="localDate" pattern="dd/MM/yyyy" />
-                </h:outputText>
-            </h:column>
+            <section class="panel">
+                <h:panelGroup rendered="#{empty atendimentoBean.atendimentos}">
+                    <p class="empty-message">Nenhum atendimento encontrado.</p>
+                </h:panelGroup>
 
-            <h:column>
-                <f:facet name="header">Descricao</f:facet>
-                <h:outputText value="#{atendimento.descricao}" />
-            </h:column>
+                <h:dataTable value="#{atendimentoBean.atendimentos}" var="atendimento"
+                             styleClass="data-table"
+                             rendered="#{not empty atendimentoBean.atendimentos}">
+                    <h:column>
+                        <f:facet name="header">ID</f:facet>
+                        <h:outputText value="#{atendimento.id}" />
+                    </h:column>
 
-            <h:column>
-                <f:facet name="header">Status</f:facet>
-                <h:outputText value="#{atendimento.status}" />
-            </h:column>
+                    <h:column>
+                        <f:facet name="header">Data do atendimento</f:facet>
+                        <h:outputText value="#{atendimento.dataAtendimento}">
+                            <f:convertDateTime type="localDate" pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                    </h:column>
 
-            <h:column>
-                <f:facet name="header">Paciente</f:facet>
-                <h:outputText value="#{atendimento.paciente.nome}" />
-            </h:column>
+                    <h:column>
+                        <f:facet name="header">Descrição</f:facet>
+                        <h:outputText value="#{atendimento.descricao}" />
+                    </h:column>
 
-            <h:column>
-                <f:facet name="header">Acoes</f:facet>
-                <h:commandLink value="Editar" action="#{atendimentoBean.prepararEdicao(atendimento.id)}" />
-                <h:outputText value=" | " />
-                <h:commandLink value="Excluir" action="#{atendimentoBean.excluir(atendimento.id)}" />
-            </h:column>
-        </h:dataTable>
-    </h:form>
+                    <h:column>
+                        <f:facet name="header">Status</f:facet>
+                        <h:outputText value="#{atendimento.status}" />
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">Paciente</f:facet>
+                        <h:outputText value="#{atendimento.paciente.nome}" />
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">Ações</f:facet>
+                        <div class="actions">
+                            <h:commandLink value="Editar" action="#{atendimentoBean.prepararEdicao(atendimento.id)}"
+                                           styleClass="button secondary" />
+                            <h:commandLink value="Excluir" action="#{atendimentoBean.excluir(atendimento.id)}"
+                                           styleClass="button danger"
+                                           onclick="return confirm('Deseja excluir este atendimento?');" />
+                        </div>
+                    </h:column>
+                </h:dataTable>
+            </section>
+        </h:form>
+    </main>
 </h:body>
 </html>
