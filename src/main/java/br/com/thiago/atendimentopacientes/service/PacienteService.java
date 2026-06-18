@@ -69,13 +69,11 @@ public class PacienteService {
     }
 
     private void validarCpfDuplicadoAoCadastrar(Paciente paciente) {
-        if (paciente.getId() != null) {
-            return;
-        }
-
-        if (pacienteRepository.findByCpf(paciente.getCpf()).isPresent()) {
-            throw new RegraNegocioException("Ja existe paciente cadastrado com este CPF");
-        }
+        pacienteRepository.findByCpf(paciente.getCpf())
+                .filter(pacienteEncontrado -> !pacienteEncontrado.getId().equals(paciente.getId()))
+                .ifPresent(pacienteEncontrado -> {
+                    throw new RegraNegocioException("Ja existe paciente cadastrado com este CPF");
+                });
     }
 
     private boolean estaEmBranco(String valor) {

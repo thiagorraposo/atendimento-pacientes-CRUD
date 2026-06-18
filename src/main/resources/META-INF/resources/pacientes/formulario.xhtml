@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:pt="jakarta.faces.passthrough">
+<f:metadata>
+    <f:viewParam name="id" value="#{pacienteBean.pacienteId}" />
+    <f:viewAction action="#{pacienteBean.carregarFormulario}" />
+</f:metadata>
+
+<h:head>
+    <title>Formulario de Paciente</title>
+</h:head>
+<h:body>
+    <h1>Formulario de Paciente</h1>
+
+    <h:messages showDetail="true" />
+
+    <h:form>
+        <h:inputHidden value="#{pacienteBean.paciente.id}" />
+
+        <p>
+            <h:outputLabel for="nome" value="Nome" /><br />
+            <h:inputText id="nome" value="#{pacienteBean.paciente.nome}" required="true"
+                         requiredMessage="Nome e obrigatorio" />
+            <h:message for="nome" />
+        </p>
+
+        <p>
+            <h:outputLabel for="cpf" value="CPF" /><br />
+            <h:inputText id="cpf" value="#{pacienteBean.paciente.cpf}" required="true"
+                         requiredMessage="CPF e obrigatorio" />
+            <h:message for="cpf" />
+        </p>
+
+        <p>
+            <h:outputLabel for="dataNascimento" value="Data de nascimento" /><br />
+            <h:inputText id="dataNascimento" value="#{pacienteBean.paciente.dataNascimento}" pt:type="date">
+                <f:convertDateTime type="localDate" pattern="yyyy-MM-dd" />
+            </h:inputText>
+            <h:message for="dataNascimento" />
+        </p>
+
+        <p>
+            <h:outputLabel for="telefone" value="Telefone" /><br />
+            <h:inputText id="telefone" value="#{pacienteBean.paciente.telefone}" />
+            <h:message for="telefone" />
+        </p>
+
+        <p>
+            <h:outputLabel for="email" value="Email" /><br />
+            <h:inputText id="email" value="#{pacienteBean.paciente.email}" />
+            <h:message for="email" />
+        </p>
+
+        <p>
+            <h:outputLabel for="cidade" value="Cidade" /><br />
+            <h:inputText id="cidade" value="#{pacienteBean.paciente.cidade}" />
+            <h:message for="cidade" />
+        </p>
+
+        <h:commandButton value="Salvar" action="#{pacienteBean.salvar}" />
+        <h:button value="Cancelar" outcome="/pacientes/listar" />
+    </h:form>
+</h:body>
+</html>
