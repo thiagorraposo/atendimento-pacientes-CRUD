@@ -32,6 +32,10 @@ public class PacienteService {
 
     @Transactional(readOnly = true)
     public Optional<Paciente> buscarPorId(Long id) {
+        if (id == null) {
+            throw new RegraNegocioException("Id do paciente e obrigatorio");
+        }
+
         return pacienteRepository.findById(id);
     }
 
@@ -47,6 +51,10 @@ public class PacienteService {
 
     @Transactional
     public void excluir(Long id) {
+        if (id == null) {
+            throw new RegraNegocioException("Id do paciente e obrigatorio");
+        }
+
         if (!pacienteRepository.existsById(id)) {
             throw new RegraNegocioException("Paciente nao encontrado para exclusao");
         }

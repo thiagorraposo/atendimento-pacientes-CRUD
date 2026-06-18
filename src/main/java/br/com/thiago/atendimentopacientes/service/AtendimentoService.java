@@ -37,6 +37,10 @@ public class AtendimentoService {
 
     @Transactional(readOnly = true)
     public Optional<Atendimento> buscarPorId(Long id) {
+        if (id == null) {
+            throw new RegraNegocioException("Id do atendimento e obrigatorio");
+        }
+
         return atendimentoRepository.findById(id);
     }
 
@@ -64,6 +68,10 @@ public class AtendimentoService {
 
     @Transactional
     public void excluir(Long id) {
+        if (id == null) {
+            throw new RegraNegocioException("Id do atendimento e obrigatorio");
+        }
+
         if (!atendimentoRepository.existsById(id)) {
             throw new RegraNegocioException("Atendimento nao encontrado para exclusao");
         }
